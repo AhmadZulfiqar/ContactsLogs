@@ -1,6 +1,6 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 // Using the variable for consistency
 const VITE_BACKEND_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000"; // Fallback to localhost if not set
