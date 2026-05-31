@@ -11,31 +11,29 @@ const AddContact = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // 1. USE FORMDATA FOR FILES
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("phone", phone);
-    if (img) {
-      formData.append("img", img); // Append the actual file
-    }
-
-    try {
-      const res = await axios.post(`${VITE_BACKEND_URL}/add-contact`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Correct header for Multer
-        },
-      });
-
-      console.log("Success:", res.data);
-      alert("Contact Saved!");
-      navigate('/'); 
-    } catch (error) {
-      console.error("Error saving contact:", error);
-      alert("Failed to save contact.");
-    }
-  };
+  const formData = new FormData();
+  formData.append('name', name);
+  formData.append('phone', phone);
+  
+  // ✨ FIX: Only append if a real file is loaded (avoids passing string "null")
+  if (img && img instanceof File) {
+    formData.append('img', img);
+  }
+  
+  try {
+    const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/add-contact`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    console.log("Saved successfully:", response.data);
+    navigate('/'); // Smooth redirection back to contact logs list
+  } catch (err) {
+    console.error("Frontend Submission Error:", err);
+  }
+};
 
   return (
     <div className="w-full h-screen bg-slate-900 flex justify-center items-start pt-20 p-4">
